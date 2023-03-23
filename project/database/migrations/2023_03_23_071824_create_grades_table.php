@@ -15,16 +15,16 @@ return new class extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('students_id')->index('students_id');
+            $table->uuid('student_id')->index('student_id');
             $table->integer('quiz')->nullable();
-            $table->integer('tugas')->nullable();
-            $table->integer('absensi')->nullable();
-            $table->integer('praktek')->nullable();
-            $table->integer('uas')->nullable();
+            $table->integer('assignment')->nullable();
+            $table->integer('attendance')->nullable();
+            $table->integer('practice')->nullable();
+            $table->integer('final_exam')->nullable();
             $table->timestamps();
 
             // Foreign keys
-            $table->foreign('students_id')->references('id')->on('students')
+            $table->foreign('student_id')->references('id')->on('students')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');            
         });

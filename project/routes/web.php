@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\GradeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
 // fetch and view all
-// Route::get('/', [
-//     VideoController::class,
-//     'index'
-// ])->name('list.video');
+Route::get('/', [Controller::class,'index'])->name('dahboard');
+
+Route::get('/students', [StudentController::class,'index'])->name('list.student');
+
+Route::get('/grade', [GradeController::class,'index'])->name('list.grade');
 
 // // create and upload
 // Route::get('video-upload', [

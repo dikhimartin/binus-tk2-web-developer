@@ -18,7 +18,15 @@ Langkah pengerjaan:
 5. `docker-compose exec myapp php artisan adminlte:install` untuk install framework laravel-adminlte
 6. `docker-compose exec myapp php artisan adminlte:plugins install --plugin=datatables --plugin=datatablesPlugins` enable adminlte datatables
 
-<!-- CARA -->
+<!-- Proses Pengerjaan -->
+
+composer require jeroennoten/laravel-adminlte
+php artisan adminlte:install
+php artisan adminlte:plugins install --plugin=datatables --plugin=datatablesPlugins
 
 php artisan make:model Student -m
 php artisan make:model Grade -m
+
+
+php artisan make:controller StudentController
+php artisan make:controller GradeController

@@ -6,6 +6,7 @@ return [
     'blog'                          => 'Blog',
     'pages'                         => 'Halaman',
     'account_settings'              => 'PENGATURAN AKUN',
+    'master_data'                   => 'MASTER DATA',
     'profile'                       => 'Profil',
     'change_password'               => 'Ubah Kata Sandi',
     'multilevel'                    => 'Multi Level',
