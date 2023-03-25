@@ -57,7 +57,10 @@ return [
     
     // => MASTER
     'master_data' => 'Master Data',
+    'students' => 'Mahasiswa',
     'student_list' => 'Daftar Mahasiswa',
+
+
     'grade_list' => 'Daftar Nilai',
 
     // => SETTING

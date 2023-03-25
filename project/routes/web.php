@@ -12,20 +12,25 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 
 	Route::get('/dashboard', 'HomeController@index')->name('home');
 
+	/*
+	 |--------------------------------------------------------------------------
+	 | MODUL MASTER
+	 |--------------------------------------------------------------------------
+	*/
 	// Students
 	Route::get('students',
 	[
-		'as'=>'group_user.index',
-		'uses'=>'GroupUserController@index',
+		'as'=>'students.index',
+		'uses'=>'StudentController@index',
 	]);
-	Route::get('/get_students_data','GroupUserController@get_group_user_data');
-	Route::get('/get_students_data_byid','GroupUserController@get_group_user_data_byid');
-	Route::post('/students/save','GroupUserController@save');
-	Route::post('/students/update','GroupUserController@update');
-	Route::post('/students/change_status_active/{id}','GroupUserController@change_status_active');
-	Route::post('/students/change_status_inactive/{id}','GroupUserController@change_status_inactive');
-	Route::post('/students/deleted_all/{id}','GroupUserController@delete_all');
-	Route::post('/students/deleted','GroupUserController@delete');
+	// Route::get('/get_students_data_byid','StudentController@get_data_byid');
+	Route::get('/students/{id}','StudentController@get_data_byid');
+	Route::post('/students/save','StudentController@save');
+	Route::post('/students/update','StudentController@update');
+	Route::post('/students/change_status_active/{id}','StudentController@change_status_active');
+	Route::post('/students/change_status_inactive/{id}','StudentController@change_status_inactive');
+	Route::post('/students/deleted_all/{id}','StudentController@delete_all');
+	Route::post('/students/deleted','StudentController@delete');
 
 	// grades
 	Route::get('grades',
@@ -76,7 +81,6 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 		'as'=>'group_user.index',
 		'uses'=>'GroupUserController@index',
 	]);
-	Route::get('/get_group_user_data','GroupUserController@get_group_user_data');
 	Route::get('/get_group_user_data_byid','GroupUserController@get_group_user_data_byid');
 	Route::post('/group_user/save','GroupUserController@save');
 	Route::post('/group_user/update','GroupUserController@update');

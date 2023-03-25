@@ -4,22 +4,21 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\GroupUser;
+use App\Student;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use DB;
 
-class GroupUserController extends Controller
+class StudentController extends Controller
 {
     
-    private $controller = 'group_user';
+    private $controller = 'students';
 
     private function title(){
-        return __('main.group_user');
+        return __('main.students');
     }
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->middleware('auth');
     }
 
@@ -34,13 +33,13 @@ class GroupUserController extends Controller
         $operator_filter    = $request->get('operator_filter');
         $text_filter        = $request->get('text_filter');
 
-        $group_user = new GroupUser;
-        $datas = $group_user->get_data();
+        $row = new Student;
+        $datas = $row->get_data();
         
         if ($text_filter !== false && $operator_filter == "LIKE"){
-            $datas->where('group_users.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
+            $datas->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
         }else if ($text_filter !== false && $operator_filter == "="){
-            $datas->where('group_users.'.$field_filter.'', '=', "".$text_filter."");      
+            $datas->where('students.'.$field_filter.'', '=', "".$text_filter."");      
         }
 
         $datas->orderBy('id','DESC');
@@ -56,10 +55,10 @@ class GroupUserController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if($request->name_group == '')
+        if($request->name == '')
         {
-            $data['inputerror'][] = 'name_group';
-            $data['error_string'][] = 'Group name is required';
+            $data['inputerror'][] = 'name';
+            $data['error_string'][] = 'Name is required';
             $data['status'] = FALSE;
         }
 
@@ -81,11 +80,11 @@ class GroupUserController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        GroupUserController::_validate_data($request);
+        StudentController::_validate_data($request);
 
-        $pk = new GroupUser;
-        $pk->id             = $request->id;
-        $pk->name_group     = $request->name_group;
+        $pk = new Student;
+        $pk->name           = $request->name;
+        $pk->email          = $request->email;
         $pk->description    = $request->description;
         $pk->status         = $request->status;
         $pk->save();
@@ -106,11 +105,11 @@ class GroupUserController extends Controller
             return  json_encode("error_403");
         }
 
-        GroupUserController::_validate_data($request);
+        StudentController::_validate_data($request);
 
-        $pk = GroupUser::find($request->id);
-        $pk->id             = $request->id;
-        $pk->name_group     = $request->name_group;
+        $pk = Student::find($request->id);
+        $pk->name           = $request->name;
+        $pk->email          = $request->email;
         $pk->description    = $request->description;
         $pk->status         = $request->status;
         $pk->save();
@@ -132,7 +131,7 @@ class GroupUserController extends Controller
         }
 
 
-        $pk = GroupUser::find($id);
+        $pk = Student::find($id);
         $pk->status = "Y";
         $pk->save();
         $result=array(
@@ -152,7 +151,7 @@ class GroupUserController extends Controller
             return  json_encode("error_403");
         }
 
-        $pk = GroupUser::find($id);
+        $pk = Student::find($id);
         $pk->status = "N";
         $pk->save();
         $result=array(
@@ -172,7 +171,7 @@ class GroupUserController extends Controller
         }
 
 
-        $pk = GroupUser::find($request->id);
+        $pk = Student::find($request->id);
         $pk->delete();
         $result=array(
                 "data_post"=>array(
@@ -185,13 +184,12 @@ class GroupUserController extends Controller
     }
 
     public function delete_all($id){
-
         if (!Auth::user()->can($this->controller.'-delete')){
             echo json_encode("error_403");
         }
 
 
-        DB::table("group_users")->whereIn('id',explode(",",$id))->delete();
+        DB::table("students")->whereIn('id',explode(",",$id))->delete();
 
         $result=array(
                 "data_post"=>array(
@@ -211,11 +209,11 @@ class GroupUserController extends Controller
 
         $id = $request->id;
 
-        $data_divisi = DB::table('group_users')->select('group_users.*')
+        $data = DB::table('students')->select('students.*')
         ->where('id',$id)
         ->first();
 
-        $data_return =array('data_divisi'=>$data_divisi);
+        $data_return =array('data'=>$data);
         return response()->json($data_return);
     }
 

@@ -17,6 +17,8 @@ class CreateStudentsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name', 50)->nullable(true);
             $table->string('email', 100)->nullable(true);
+            $table->string('description', 191)->nullable();
+            $table->enum('status', ['Y', 'N'])->nullable(true);
             $table->timestamps();
         });
     }
