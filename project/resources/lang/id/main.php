@@ -54,6 +54,11 @@ return [
     'dont_have_permission' => 'ANDA TIDAK MEMILIKI IZIN',
     'dont_have_permission_to_access_on_this_server' => "ANDA TIDAK MEMILIKI IZIN UNTUK MENGAKSES PADA SERVER INI.",
     'back_to_home' => 'Kembali ke Halaman Utama',
+    
+    // => MASTER
+    'master_data' => 'Master Data',
+    'student_list' => 'Daftar Mahasiswa',
+    'grade_list' => 'Daftar Nilai',
 
     // => SETTING
     // Users

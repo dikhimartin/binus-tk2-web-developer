@@ -119,3 +119,10 @@ docker-compose up restart myapp
 ------
 
 
+Proses Pengerjaan 
+
+php artisan make:model Student -m 
+php artisan make:model Grade -m
+
+php artisan make:controller StudentController 
+php artisan make:controller GradeController

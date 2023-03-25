@@ -12,6 +12,37 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 
 	Route::get('/dashboard', 'HomeController@index')->name('home');
 
+	// Students
+	Route::get('students',
+	[
+		'as'=>'group_user.index',
+		'uses'=>'GroupUserController@index',
+	]);
+	Route::get('/get_students_data','GroupUserController@get_group_user_data');
+	Route::get('/get_students_data_byid','GroupUserController@get_group_user_data_byid');
+	Route::post('/students/save','GroupUserController@save');
+	Route::post('/students/update','GroupUserController@update');
+	Route::post('/students/change_status_active/{id}','GroupUserController@change_status_active');
+	Route::post('/students/change_status_inactive/{id}','GroupUserController@change_status_inactive');
+	Route::post('/students/deleted_all/{id}','GroupUserController@delete_all');
+	Route::post('/students/deleted','GroupUserController@delete');
+
+	// grades
+	Route::get('grades',
+	[
+		'as'=>'group_user.index',
+		'uses'=>'GroupUserController@index',
+	]);
+	Route::get('/get_grades_data','GroupUserController@get_group_user_data');
+	Route::get('/get_grades_data_byid','GroupUserController@get_group_user_data_byid');
+	Route::post('/grades/save','GroupUserController@save');
+	Route::post('/grades/update','GroupUserController@update');
+	Route::post('/grades/change_status_active/{id}','GroupUserController@change_status_active');
+	Route::post('/grades/change_status_inactive/{id}','GroupUserController@change_status_inactive');
+	Route::post('/grades/deleted_all/{id}','GroupUserController@delete_all');
+	Route::post('/grades/deleted','GroupUserController@delete');
+
+
 	/*
 	 |--------------------------------------------------------------------------
 	 | MODUL SETTING

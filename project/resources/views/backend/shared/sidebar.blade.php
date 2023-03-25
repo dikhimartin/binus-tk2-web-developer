@@ -47,10 +47,38 @@
                 <li class="hover {!! trim($__env->yieldContent('sidebarActive')) == 'bank' ? ' active' : '' !!}">
                     <a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/dashboard' ))}}" class="waves-effect" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">{{ __('main.dashboard') }}</span></a>
                 </li>
+                <!--MASTER MODUL-->
+                @if ($user->can('students-list') || $user->can('grades-list') )
+                    <li>
+                        <a class="has-arrow waves-effect" href="javascript:void(0)" aria-expanded="false">
+                            <i class="fa fa-database" aria-hidden="true"></i></i>&nbsp;<span class="hide-menu">{{ __('main.master_data') }}</span>
+                        </a>
+                        <ul id="setting_expand" aria-expanded="false" class="collapse">
+                            @if ($user->can('students-list') || $user->can('grades-list') )
+                                @if ($user->can('students-list'))
+                                    <li class="hover {!! trim($__env->yieldContent('sidebarActive')) == 'users' ? ' active' : '' !!}">
+                                        <a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/students' ))}}">
+                                            <span class="menu-text"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ __('main.student_list') }}</span>
+                                        </a>
+                                    </li>
+                                @endif
+                                @if ($user->can('grades-list'))
+                                    <li class="hover {!! trim($__env->yieldContent('sidebarActive')) == 'users' ? ' active' : '' !!}">
+                                        <a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/grades' ))}}">
+                                            <span class="menu-text"><i class="fa fa-angle-double-right" aria-hidden="true"></i>&nbsp;{{ __('main.grade_list') }}</span>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endif
+                        </ul>
+                    </li>
+                @endif
+                
                 <!--SETTING MODUL-->
                 @if ($user->can('users-list') || $user->can('roles-list') || $user->can('group_user-list') )
                     <li>
-                        <a class="has-arrow waves-effect" href="javascript:void(0)" aria-expanded="false"><i class="fa fa-cog" aria-hidden="true"></i></i>&nbsp;<span class="hide-menu">{{ __('main.setting') }}</span>
+                        <a class="has-arrow waves-effect" href="javascript:void(0)" aria-expanded="false">
+                            <i class="fa fa-cog" aria-hidden="true"></i></i>&nbsp;<span class="hide-menu">{{ __('main.setting') }}</span>
                         </a>
                         <ul id="setting_expand" aria-expanded="false" class="collapse">
                             @if ($user->can('users-list') || $user->can('roles-list') || $user->can('group_user-list') )

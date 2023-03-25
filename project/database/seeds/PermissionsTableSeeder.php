@@ -120,6 +120,78 @@ class PermissionsTableSeeder extends Seeder
                 'sort' => 1,
                 'created_at' => '2023-03-17 14:24:23',
                 'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 13,
+                'name' => 'students-list',
+                'display_name' => 'Students List',
+                'description' => 'Students List',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 14,
+                'name' => 'students-create',
+                'display_name' => 'Students Create',
+                'description' => 'Students Create',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 15,
+                'name' => 'students-edit',
+                'display_name' => 'Students Edit',
+                'description' => 'Students Edit',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 16,
+                'name' => 'students-delete',
+                'display_name' => 'Students Delete',
+                'description' => 'Students Delete',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 17,
+                'name' => 'grades-list',
+                'display_name' => 'Grades List',
+                'description' => 'Grades List',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 18,
+                'name' => 'grades-create',
+                'display_name' => 'Grades Create',
+                'description' => 'Grades Create',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 19,
+                'name' => 'grades-edit',
+                'display_name' => 'Grades Edit',
+                'description' => 'Grades Edit',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
+            ],
+            [
+                'id' => 20,
+                'name' => 'grades-delete',
+                'display_name' => 'Grades Delete',
+                'description' => 'Grades Delete',
+                'sort' => 1,
+                'created_at' => '2023-03-17 14:24:23',
+                'updated_at' => '2023-03-17 14:24:23'
             ]
         ]);
     }
