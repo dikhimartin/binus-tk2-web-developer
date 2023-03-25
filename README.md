@@ -43,10 +43,11 @@ source : 20220629155011_TK2-W4-S5-R1
 **Tech Stack :**
 
 - **Server Container :**
+
   - Docker Engine https://docs.docker.com/engine/install2.
 
   - Docker Compose https://docs.docker.com/compose/install
-    
+
     
 
 **Proses Instalasi laravel 5.8 :**
@@ -97,15 +98,17 @@ source : 20220629155011_TK2-W4-S5-R1
 
 - Buka browser pada URL  http://localhost:8080, untuk mengakses PHPmyadmin (Database Management).
 
+- Akses Login 
 
+  - Username : binusian
+  - Password  : binusian
 
 **Note :** 
 Apabila URL belum bisa di akses, coba restart kembali container image nya dengan menggunakan command sebagai berikut
 
 ```shell
-docker-compose up -d --force-recreate myapp
+docker-compose up restart myapp
 ```
-
 
 
 ------
@@ -122,6 +125,7 @@ docker-compose up -d --force-recreate myapp
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
+
 
 ## About Laravel
 
