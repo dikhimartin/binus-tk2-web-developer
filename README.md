@@ -109,4 +109,13 @@ Apabila URL belum bisa di akses, coba restart kembali container image nya dengan
 ```shell
 docker-compose up restart myapp
 ```
+
+- Akses bash terminal
+
+  ```shell
+   docker-compose exec myapp bash
+  ```
+
 ------
+
+
