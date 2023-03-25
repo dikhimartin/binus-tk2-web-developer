@@ -159,7 +159,7 @@
                                         <td>
                                         <div class="switch">
                                             <label>
-                                                <input onclick="status_change(this.checked, {{$value->id}})" name="status_change" type="checkbox"{{$value->status == 'Y' ? "checked" : "" }}><span class="lever switch-col-blue" value="Y"></span>
+                                                <input onclick="status_change(this.checked, `{{$value->id}}`)" name="status_change" type="checkbox"{{$value->status == 'Y' ? "checked" : "" }}><span class="lever switch-col-blue" value="Y"></span>
                                             </label>
                                         </div>
                                         </td>
@@ -303,7 +303,6 @@
 
         function status_change(source, id){
             var url;
-            url = "";
             if(source == true){
                 $.ajax({
                     url : "/admin/students/change_status_active/"+id,
@@ -379,47 +378,45 @@
         }
 
         function add(){
-            // document.getElementById("btnSave").disabled = true;
             save_method = 'add';
+            $('#btnSave').text('{{__('main.save')}}'); //change button text
             $('#form_data_model')[0].reset(); // reset form on modals
             $('.form-group').removeClass('has-danger'); // clear error class
             $('.help-block').empty(); // clear error string
             $('#modal_form').modal('show'); // show bootstrap modal
             $('.modal-title').text('{{ __("main.add") }} {!! $pages_title !!}');
-            // Set Title to Bootstrap modal title
         }
 
         function edited(id){
             save_method = 'update';
+            $('#btnSave').text('{{__('main.update')}}'); //change button text
             $('#form_data_model')[0].reset(); // reset form on modals
             $('.form-group').removeClass('has-danger'); // clear error class
             $('.help-block').empty(); // clear error string
 
             //Ajax Load data from ajax
             $.ajax({
-                url : "{{ url('admin/get_group_user_data_byid') }}",
+                url: "{{ url('admin/students') }}/" + id,
                 type: "GET",
                 dataType: "JSON",
-                data: {"id":id},
                 success: function(result){
-                    $('[name="id"]').val(result.data_divisi.id);
-                    $('[name="name_group"]').val(result.data_divisi.name_group);
-                    $('[name="description"]').val(result.data_divisi.description);
-
-                    var status =result.data_divisi.status;
-                    if(status == 'Y'){
-                        $('#status').find(':radio[name=status][value="Y"]').prop('checked', true);
-                    }else{
-                        $('#status').find(':radio[name=status][value="N"]').prop('checked', true);
+                    if(result.data != null){
+                        $('[name="id"]').val(result.data.id);
+                        $('[name="name"]').val(result.data.name);
+                        $('[name="email"]').val(result.data.email);
+                        $('[name="description"]').val(result.data.description);
+    
+                        var status =result.data.status;
+                        if(status == 'Y'){
+                            $('#status').find(':radio[name=status][value="Y"]').prop('checked', true);
+                        }else{
+                            $('#status').find(':radio[name=status][value="N"]').prop('checked', true);
+                        }
+                        $('#modal_form').modal('show');
+                        $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
                     }
-
-                    $('#modal_form').modal('show');
-
-                    $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
-
                 },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
+                error: function (jqXHR, textStatus, errorThrown){
                     alert('Error get data from ajax');
                 }
             });

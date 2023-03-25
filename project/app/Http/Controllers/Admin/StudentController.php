@@ -201,13 +201,11 @@ class StudentController extends Controller
         echo json_encode($result);
     }
 
-    public function get_data_byid(Request $request){
+    public function get_data_byid($id){
 
         if (!Auth::user()->can($this->controller.'-list')){
             echo json_encode("error_403");
         }
-
-        $id = $request->id;
 
         $data = DB::table('students')->select('students.*')
         ->where('id',$id)
