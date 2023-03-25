@@ -1,4 +1,4 @@
-version: "2"
+version: '3.8'
 
 services:
   mariadb:
@@ -20,25 +20,21 @@ services:
     depends_on:
       - mariadb
   myapp:
-    image: docker.io/bitnami/laravel:9
+    image: myapp
     ports:
-      - "3000:3000"
       - "8000:8000"
     environment:
       - DB_HOST=mariadb
       - DB_PORT=3306
       - DB_USERNAME=bn_myapp
       - DB_DATABASE=bitnami_myapp
+    command: >
+      sh -c "composer install && php artisan serve --host=0.0.0.0 --port=8000"
     volumes:
       - "./project:/app"
     depends_on:
       - mariadb
       - phpmyadmin
-  composer:
-    image: composer:2
-    command: ["composer", "install"]
-    volumes:
-      - "./project:/app"
 volumes:
   mariadb_data:
     driver: local
