@@ -65,7 +65,7 @@ source : 20220629155011_TK2-W4-S5-R1
   cd binus-tk2-web-developer
   ```
 
-- copy file environtment
+- Copy file environtment
 
   ```shell
   cp ./project/.env.example ./project/.env
@@ -93,9 +93,9 @@ source : 20220629155011_TK2-W4-S5-R1
   docker-compose exec myapp  php artisan db:seed
   ```
 
-- buka browser pada URL  http://localhost:8000, untuk mengakses aplikasi.
+- Buka browser pada URL  http://localhost:8000, untuk mengakses aplikasi.
 
-- buka browser pada URL  http://localhost:8080, untuk mengakses PHPmyadmin (Database Management).
+- Buka browser pada URL  http://localhost:8080, untuk mengakses PHPmyadmin (Database Management).
 
 
 
