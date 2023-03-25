@@ -49,7 +49,7 @@ source : 20220629155011_TK2-W4-S5-R1
     
     
 
-**Proses Instalasi laravel 5.8:**
+**Proses Instalasi laravel 5.8 :**
 
 - Install Docker Engine & Docker Compose.
 
