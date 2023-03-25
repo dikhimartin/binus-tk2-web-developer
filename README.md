@@ -56,13 +56,13 @@ source : 20220629155011_TK2-W4-S5-R1
 - Cloning aplikasi source
 
   ```shell
-  git clone https://github.com/dikhimartin/compro-driving-courses.git
+  git clone https://github.com/dikhimartin/binus-tk2-web-developer.git
   ```
 
 - Masuk ke aplikasi source
 
   ```shell
-  cd compro-driving-courses
+  cd binus-tk2-web-developer
   ```
 
 - copy file environtment
