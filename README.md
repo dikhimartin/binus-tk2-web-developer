@@ -1,4 +1,4 @@
-[![Laravel Logo](https://laravel.com/assets/img/components/logo-laravel.svg)](https://tk2.binusassignment.tech)
+[![Laravel Logo](https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg)](https://tk2.binusassignment.tech)
 
 
 
