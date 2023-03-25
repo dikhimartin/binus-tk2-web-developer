@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -60,4 +61,7 @@ class StudentController extends Controller
         return view('student.list', compact('heads', 'config'));
     }
 
+    public function create(){
+        return view('student.add');
+    }
 }

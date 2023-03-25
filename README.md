@@ -1,7 +1,6 @@
 # binus-tk2-web-developer
 BINUS - Team Assignment 2 - Web Developer
 
-
 Langkah-langkah menjalankan aplikasi web di lokal:
 
 1. Jalankan `docker-compose up -d` dan kunjungi `http://localhost:8000`.
@@ -20,7 +19,6 @@ php artisan adminlte:plugins install --plugin=datatables --plugin=datatablesPlug
 
 php artisan make:model Student -m
 php artisan make:model Grade -m
-
 
 php artisan make:controller StudentController
 php artisan make:controller GradeController
