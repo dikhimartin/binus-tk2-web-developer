@@ -192,6 +192,7 @@
             </div>
         </div>
     </div>
+
     <!-- Form Modal -->
     <div class="modal fade col-md-12" id="modal_form" role="dialog" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-lg">
@@ -413,6 +414,10 @@
                         }else{
                             $('#status').find(':radio[name=status][value="N"]').prop('checked', true);
                         }
+
+                        $('[name="faculties_id"] option[value='+result.data.faculties_id+']').prop('selected',false);
+                        $('[name="faculties_id"] option[value='+result.data.faculties_id+']').prop('selected',true);
+
                         $('#modal_form').modal('show');
                         $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
                     }

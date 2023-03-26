@@ -15,7 +15,7 @@ class CreateGradesTable extends Migration
     {
         Schema::create('grades', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('student_id')->index('student_id');
+            $table->uuid('students_id')->index('students_id');
             $table->uuid('courses_id')->index('courses_id');
             $table->integer('quiz')->nullable();
             $table->integer('assignment')->nullable();
@@ -27,7 +27,7 @@ class CreateGradesTable extends Migration
             $table->timestamps();
 
             // Foreign keys
-            $table->foreign('student_id')->references('id')->on('students')
+            $table->foreign('students_id')->references('id')->on('students')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');     
             $table->foreign('courses_id')->references('id')->on('courses')

@@ -11,14 +11,14 @@ class Grade extends Model
     Use Uuid;
 
     protected $table = 'grades';
-    protected $fillable = ['student_id', 'courses_id', 'quiz', 'assignment', 'attendance', 'practice', 'final_exam','total_score','grade'];
+    protected $fillable = ['students_id', 'courses_id', 'quiz', 'assignment', 'attendance', 'practice', 'final_exam','total_score','grade'];
        
     public $incrementing = false;
 
     protected $keyType = 'uuid';
 
 
-    public function student(){
+    public function students(){
         return $this->belongsTo(Student::class);
     }
 

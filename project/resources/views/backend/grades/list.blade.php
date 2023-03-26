@@ -160,8 +160,8 @@
                                                 <span class="custom-control-label"></span>
                                             </label>
                                         </td>
-                                        <td>{{$value->student->name}}</td>
-                                        <td>{{$value->student->faculties->name}}</td>
+                                        <td>{{$value->students->name}}</td>
+                                        <td>{{$value->students->faculties->name}}</td>
                                         <td class="text-primary">
                                             {{$value->courses->code}} - 
                                             {{$value->courses->name}}
@@ -235,7 +235,7 @@
                                     <div class="form-group">
                                         <label class="control-label col-md-5">Pilih Mahasiswa <span class="required">*</span></label>
                                         <div class="col-md-9">
-                                            <select name="student_id" class="form-control select2">
+                                            <select name="students_id" class="form-control select2">
                                                 <option selected disabled="">{{__('main.search')}}</option>
                                                 @foreach($students as $kstudents => $vstudents)
                                                     <option  value="{{$vstudents->id}}">{{$vstudents->name}}</option>
@@ -518,7 +518,6 @@
 
                         if(post_arr.length > 0){
                             var url ="/admin/grades/deleted_all/"+post_arr;
-
                             // AJAX Request
                             $.ajax({
                                 url: url,

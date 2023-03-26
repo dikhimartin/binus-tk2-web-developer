@@ -36,17 +36,17 @@ class GradeController extends Controller
         $text_filter        = $request->get('text_filter');
 
         $query = Grade::whereHas('courses')
-        ->whereHas('student.faculties')
+        ->whereHas('students.faculties')
         ->with(['courses'])
-        ->with(['student.faculties']);
+        ->with(['students.faculties']);
     
         if ($text_filter !== false && $operator_filter == "LIKE"){
-            $query->where('student.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
+            $query->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
         }else if ($text_filter !== false && $operator_filter == "="){
-            $query->where('student.'.$field_filter.'', '=', "".$text_filter."");      
+            $query->where('students.'.$field_filter.'', '=', "".$text_filter."");      
         }
 
-        $query->orderBy('id','DESC');
+        $query->orderBy('grades.id','DESC');
         $rows = $query->paginate(10);
 
         $students = Student::get();
@@ -62,9 +62,14 @@ class GradeController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if($request->student_id == ''){
-            $data['inputerror'][] = 'student_id';
+        if($request->students_id == ''){
+            $data['inputerror'][] = 'students_id';
             $data['error_string'][] = 'Student is required';
+            $data['status'] = FALSE;
+        }
+        if($request->courses_id == ''){
+            $data['inputerror'][] = 'courses_id';
+            $data['error_string'][] = 'Course is required';
             $data['status'] = FALSE;
         }
         if($request->quiz == ''){
@@ -114,7 +119,7 @@ class GradeController extends Controller
         GradeController::_validate_data($request);
 
         $mod = new Grade;
-        $mod->student_id = $request->student_id;
+        $mod->students_id = $request->students_id;
         $mod->courses_id = $request->courses_id;
         $mod->quiz = $request->quiz;
         $mod->assignment = $request->assignment;
