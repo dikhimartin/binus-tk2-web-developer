@@ -98,6 +98,7 @@ class StudentController extends Controller
         StudentController::_validate_data($request);
 
         $mod = new Student;
+        $mod->code           = $request->code;
         $mod->name           = $request->name;
         $mod->faculties_id   = $request->faculties_id;
         $mod->description    = $request->description;
@@ -123,6 +124,7 @@ class StudentController extends Controller
         StudentController::_validate_data($request);
 
         $mod = Student::find($request->id);
+        $mod->code           = $request->code;
         $mod->name           = $request->name;
         $mod->faculties_id   = $request->faculties_id;
         $mod->description    = $request->description;

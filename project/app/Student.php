@@ -11,7 +11,7 @@ class Student extends Model
     Use Uuid;
 
     protected $table = 'students';
-    protected $fillable = ['name', 'faculties_id'];
+    protected $fillable = ['code','name', 'faculties_id'];
        
     public $incrementing = false;
 

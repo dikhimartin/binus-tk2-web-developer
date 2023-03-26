@@ -129,6 +129,7 @@
                                             <span class="custom-control-label"></span>
                                         </label>
                                     </td>
+                                    <td>Nomor Induk Mahasiswa</td>
                                     <td>{{__('main.name')}}</td>
                                     <td>{{__('main.faculty')}}</td>
                                     <td>{{__('main.description')}}</td>
@@ -138,7 +139,7 @@
                             </thead>
                             <tbody>
                             @if ($rows->isEmpty())
-                                <td colspan="6" class="text-center alert-danger">{{__('main.data_empty')}}</td>
+                                <td colspan="7" class="text-center alert-danger">{{__('main.data_empty')}}</td>
                             @else
                                 @foreach ($rows as $key => $value)
                                     <tr id='tr_{{$value->id}}'>
@@ -148,6 +149,7 @@
                                                 <span class="custom-control-label"></span>
                                             </label>
                                         </td>
+                                        <td>{{$value->code}}</td>
                                         <td>{{$value->name}}</td>
                                         <td>{{$value->faculties->name}}</td>
                                         <td>{{$value->description}}</td>
@@ -216,11 +218,20 @@
 
                                     <input type="hidden" value="" name="id" id="id" />
 
+                                    <!--nim-->
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5">Nomor Induk Mahasiswa<span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="code" required="" placeholder="NIM" class="form-control">
+                                             <small class="form-control-feedback"></small>
+                                        </div>
+                                    </div>
+
                                     <!--name-->
                                     <div class="form-group">
                                        <label class="control-label col-md-5">{{ __('main.name') }} <span class="required">*</span></label>
                                         <div class="col-md-9">
-                                            <input type="name" name="name" required="" placeholder="{{__('main.name')}}" class="form-control">
+                                            <input type="text" name="name" required="" placeholder="{{__('main.name')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
@@ -294,6 +305,19 @@
         disabledButtonHapusSemua();
         $("input[type=checkbox]").on("click", function() {
             disabledButtonHapusSemua();
+        });
+
+        $(document).ready(function() {
+            $('input[name="code"]').on('input', function() {
+                var value = $(this).val();
+                var newValue = '';
+                for (var i = 0; i < value.length; i++) {
+                    if (!isNaN(value[i]) && newValue.length < 10) {
+                        newValue += value[i];
+                    }
+                }
+                $(this).val(newValue);
+            });
         });
 
         function toggle(source) {
@@ -404,6 +428,7 @@
                 success: function(result){
                     if(result.data != null){
                         $('[name="id"]').val(result.data.id);
+                        $('[name="code"]').val(result.data.code);
                         $('[name="name"]').val(result.data.name);
                         $('[name="email"]').val(result.data.email);
                         $('[name="description"]').val(result.data.description);
