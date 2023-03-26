@@ -41,10 +41,15 @@ class StudentController extends Controller
             $query->orderBy('name', 'desc');
         }]);
     
-        if ($text_filter !== false && $operator_filter == "LIKE"){
-            $query->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
-        }else if ($text_filter !== false && $operator_filter == "="){
-            $query->where('students.'.$field_filter.'', '=', "".$text_filter."");      
+        if (!empty($text_filter)) {
+            switch ($operator_filter) {
+                case 'LIKE':
+                    $query->where('students.'.$field_filter.'', 'LIKE', '%'.$text_filter.'%');
+                    break;
+                case '=':
+                    $query->where('students.'.$field_filter.'', '=', $text_filter);
+                    break;
+            }
         }
 
         $query->orderBy('id','DESC');

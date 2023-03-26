@@ -40,10 +40,19 @@ class GradeController extends Controller
         ->with(['courses'])
         ->with(['students.faculties']);
     
-        if ($text_filter !== false && $operator_filter == "LIKE"){
-            $query->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
-        }else if ($text_filter !== false && $operator_filter == "="){
-            $query->where('students.'.$field_filter.'', '=', "".$text_filter."");      
+        if (!empty($text_filter)) {
+            switch ($operator_filter) {
+                case 'LIKE':
+                    $query->whereHas('students', function ($q) use ($field_filter, $text_filter) {
+                        $q->where($field_filter, 'LIKE', '%' . $text_filter . '%');
+                    });
+                    break;
+                case '=':
+                    $query->whereHas('students', function ($q) use ($field_filter, $text_filter) {
+                        $q->where($field_filter, '=', $text_filter);
+                    });
+                    break;
+            }
         }
 
         $query->orderBy('grades.id','DESC');

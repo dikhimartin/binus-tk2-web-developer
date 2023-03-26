@@ -51,7 +51,6 @@
                                                         <label>{{__('main.search_by')}}</label>
                                                         <select name="field_filter" class="form-control">
                                                             <option value="name" {{ $field_filter == 'name' ? "selected" : "" }}>{{__('main.name')}}</option>
-                                                            <option value="description" {{ $field_filter == 'description' ? "selected" : "" }}>{{__('main.description')}}</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -177,7 +176,7 @@
                             </thead>
                             <tbody>
                             @if ($rows->isEmpty())
-                                <td colspan="11" class="text-center alert-danger">{{__('main.data_empty')}}</td>
+                                <td colspan="12" class="text-center alert-danger">{{__('main.data_empty')}}</td>
                             @else
                                 @foreach ($rows as $key => $value)
                                     <tr id='tr_{{$value->id}}'>
