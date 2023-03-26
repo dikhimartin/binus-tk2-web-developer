@@ -31,6 +31,7 @@ return [
     'choose'=>'Pilih',
     'filter_data'=>'Filter Data',
     'list_data'=>'Daftar Data',
+    'search'=>'Cari',
     'search_by'=>'Pencarian Berdasarkan',
     'user_access'=>'Akses Pengguna',
     'status'=>'Status',
@@ -59,9 +60,16 @@ return [
     'master_data' => 'Master Data',
     'students' => 'Mahasiswa',
     'student_list' => 'Daftar Mahasiswa',
-
-
     'grade_list' => 'Daftar Nilai',
+    'grades' => 'Nilai',
+    'quiz_score' => 'Nilai Quiz',
+    'assignment_score' => 'Nilai Tugas',
+    'attendance_score' => 'Nilai Absensi',
+    'practice_score' => 'Nilai Praktek',
+    'final_exam_score' => 'Nilai UAS',
+    'faculty' => 'Fakultas',
+    'course' => 'Mata Kuliah',
+
 
     // => SETTING
     // Users
@@ -118,6 +126,7 @@ return [
     'save' => 'Simpan',
     'cancel' => 'Batal',
     'data_empty' => 'Data kosong',
+    'updated' => 'Mengubah',
     'saving' => 'Menyimpan',
     'data_already_active' => 'Data Sudah Aktif',
     'data_inactive' => 'Data Tidak Aktif',

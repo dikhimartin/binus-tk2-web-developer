@@ -2,12 +2,17 @@
 @section('sidebarActive', $controller)
 
 @section('content')
+    <link href="{{URL::asset("admin_assets/assets/plugins/select2/dist/css/select2.min.css")}}" rel="stylesheet" type="text/css" />
     <style type="text/css">
         table , td, th {
             border: 1px solid #595959;
             border-collapse: collapse;
         }
+        .select2-container {
+            width: 100% !important;
+        }        
     </style>
+
     <!-- Bread crumb and right sidebar toggle -->
     <div class="row page-titles">
         <div class="col-md-5 align-self-center">
@@ -16,7 +21,7 @@
         <div class="col-md-7 align-self-center">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/dashboard' )) }}">{{ __('main.dashboard') }}</a></li>
-                <li class="breadcrumb-item"><a href="javascript:void(0)">{{ __('main.setting') }}</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{{ __('main.master_data') }}</a></li>
                 <li class="breadcrumb-item active">{!! $pages_title !!}</li>
             </ol>
         </div>
@@ -45,7 +50,7 @@
                                                     <div class="form-group">
                                                         <label>{{__('main.search_by')}}</label>
                                                         <select name="field_filter" class="form-control">
-                                                            <option value="name_group" {{ $field_filter == 'name_group' ? "selected" : "" }}>{{__('main.name_group')}}</option>
+                                                            <option value="name" {{ $field_filter == 'name' ? "selected" : "" }}>{{__('main.name')}}</option>
                                                             <option value="description" {{ $field_filter == 'description' ? "selected" : "" }}>{{__('main.description')}}</option>
                                                         </select>
                                                     </div>
@@ -67,7 +72,7 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <button class="btn btn-info btn-sm waves-light btn-search" type="submit"><span class="btn-label"><i class="fa fa-search"></i></span>&nbsp;{{__('search')}}
+                                                <button class="btn btn-info btn-sm waves-light btn-search" type="submit"><span class="btn-label"><i class="fa fa-search"></i></span>&nbsp;{{__('main.search')}}
                                                 </button>
 
                                                 <a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/'.$controller )) }}" class="btn btn-warning btn-sm btn-reload" data-toggle="tooltip" data-placement="top" title="{{__('main.reload')}}">
@@ -96,25 +101,23 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="button-group">
-                                    @permission('group_user-create')
-                                    <a href="javascript:void(0)">
-                                         <button onclick="add()" class="btn btn-info btn-sm waves-light" type="button" data-toggle="tooltip" data-placement="top" title="{{__('main.add_new')}}"><span class="btn-label"><i class="fa fa-plus"></i></span>&nbsp;{{__('main.add_new')}}
-                                         </button>
-                                    </a>
-                                    @endpermission
-
-                                    @permission('group_user-delete')
-                                    <a href="javascript:void(0)">
-                                        <button id="btn-hps-semua" onclick="removed_all_data()" class="btn btn-danger btn-sm waves-light" type="button" data-toggle="tooltip" data-placement="top" title="{{__('main.delete_all')}}"><span class="btn-label"><i class="fa fa-trash"></i>
-                                            </span>&nbsp;{{__('main.delete_all')}}
+                                @permission('students-create')
+                                <a href="javascript:void(0)">
+                                        <button onclick="add()" class="btn btn-info btn-sm waves-light" type="button" data-toggle="tooltip" data-placement="top" title="{{__('main.add_new')}}"><span class="btn-label"><i class="fa fa-plus"></i></span>&nbsp;{{__('main.add_new')}}
                                         </button>
-                                    </a>
-                                    @endpermission
+                                </a>
+                                @endpermission
 
+                                @permission('students-delete')
+                                <a href="javascript:void(0)">
+                                    <button id="btn-hps-semua" onclick="removed_all_data()" class="btn btn-danger btn-sm waves-light" type="button" data-toggle="tooltip" data-placement="top" title="{{__('main.delete_all')}}"><span class="btn-label"><i class="fa fa-trash"></i>
+                                        </span>&nbsp;{{__('main.delete_all')}}
+                                    </button>
+                                </a>
+                                @endpermission
                             </div>
                         </div>
                     </div>
-
                     <p style="margin-bottom: 20px;"></p>
 
                     <div id="notif_success"></div>
@@ -123,27 +126,33 @@
                         <table class="table table-hover" id='recordsTable'>
                             <thead>
                                 <tr class="bg-secondary text-white">
-                                    <td>
+                                    <td rowspan="2">
                                         <label class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input"
                                                 id="parent-checkbox-hapus" onClick="toggle(this)">
                                             <span class="custom-control-label"></span>
                                         </label>
                                     </td>
-                                    <td>No.</th>
-                                    <td>{{__('main.name_group')}}</td>
-                                    <td>{{__('main.description')}}</td>
-                                    <td>{{__('main.status')}}</td>
-                                    <td>{{__('main.action')}}</td>
+                                    <td rowspan="2">Nama Mahasiswa</td>
+                                    <td rowspan="2">Fakultas</td>
+                                    <td rowspan="2">Mata Kuliah</td>
+                                    <td style="text-align: center;" colspan="7">Informasi Nilai</td>
+                                    <tr class="bg-secondary text-white">
+                                        <td>Nilai Quiz</td>
+                                        <td>Nilai Tugas</td>
+                                        <td>Nilai Absensi</td>
+                                        <td>Nilai praktek</td>
+                                        <td>Nilai UAS</td>
+                                        <td>Total&nbsp;</td>
+                                        <td>Grade</td>
+                                    </tr>
                                 </tr>
                             </thead>
                             <tbody>
                             @if ($rows->isEmpty())
-                                <td colspan="6" class="text-center alert-danger">{{__('main.data_empty')}}</td>
+                                <td colspan="11" class="text-center alert-danger">{{__('main.data_empty')}}</td>
                             @else
-                                <?php $no = ($rows->currentPage() - 1) * $rows->perPage(); ?>
                                 @foreach ($rows as $key => $value)
-                                    <?php $no++; ?>
                                     <tr id='tr_{{$value->id}}'>
                                         <td width="10">
                                             <label class="custom-control custom-checkbox">
@@ -151,29 +160,33 @@
                                                 <span class="custom-control-label"></span>
                                             </label>
                                         </td>
-                                        <td width="10">{!! $no !!}
+                                        <td>{{$value->student->name}}</td>
+                                        <td>{{$value->student->faculties->name}}</td>
+                                        <td class="text-primary">
+                                            {{$value->courses->code}} - 
+                                            {{$value->courses->name}}
                                         </td>
-                                        <td>{{$value->name_group}}</td>
-                                        <td>{{$value->description}}</td>
-                                        <td>
-                                        <div class="switch">
-                                            <label>
-                                                <input onclick="status_change(this.checked, {{$value->id}})" name="status_change" type="checkbox"{{$value->status == 'Y' ? "checked" : "" }}><span class="lever switch-col-blue" value="Y"></span>
-                                            </label>
-                                        </div>
+                                        <td>{{$value->quiz}}</td>
+                                        <td>{{$value->assignment}}</td>
+                                        <td>{{$value->attendance}}</td>
+                                        <td>{{$value->practice}}</td>
+                                        <td>{{$value->final_exam}}</td>
+                                        <td>{{$value->total_score}}</td>
+                                        <td class='text-info font-weight-bold'>
+                                            {{$value->grade}}
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <div class="hidden-sm hidden-sm action-buttons center">
-                                                @permission('group_user-edit')
-                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="edited({{$value->id}})" class="btn waves-effect waves-light btn-rounded btn-sm btn-info"data-toggle="tooltip" data-placement="top" title="{{__('main.edit')}}"><i class="fa fa-pencil"></i>
+                                                @permission('grades-edit')
+                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="edited(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-info"data-toggle="tooltip" data-placement="top" title="{{__('main.edit')}}"><i class="fa fa-pencil"></i>
                                                     </a>
                                                 @endpermission
-                                                @permission('group_user-delete')
-                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="removed({{$value->id}})" class="btn waves-effect waves-light btn-rounded btn-sm btn-danger"data-toggle="tooltip" data-placement="top" title="{{__('main.delete')}}"><i class="fa fa-trash"></i>
+                                                @permission('grades-delete')
+                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="removed(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-danger"data-toggle="tooltip" data-placement="top" title="{{__('main.delete')}}"><i class="fa fa-trash"></i>
                                                     </a>
                                                 @endpermission
                                             </div>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 @endforeach
                             @endif
@@ -199,7 +212,7 @@
     <!-- Form Modal -->
     <div class="modal fade col-md-12" id="modal_form" role="dialog" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-lg">
-        <form class="form-horizontal" method="post" id="form_group_user" enctype="multipart/form-data">
+        <form class="form-horizontal" method="post" id="form_data_model" enctype="multipart/form-data">
           {{ csrf_field() }}
           <!-- Modal content-->
           <div class="modal-content">
@@ -219,39 +232,75 @@
 
                                     <input type="hidden" value="" name="id" id="id" />
 
-                                    <!--nama_group-->
                                     <div class="form-group">
-                                       <label class="control-label col-md-5">{{ __('main.name_group') }} <span class="required">*</span></label>
+                                        <label class="control-label col-md-5">Pilih Mahasiswa <span class="required">*</span></label>
                                         <div class="col-md-9">
-                                            <input type="name_group" name="name_group" required="" placeholder="{{__('main.name_group')}}" class="form-control">
+                                            <select name="student_id" class="form-control select2">
+                                                <option selected disabled="">{{__('main.search')}}</option>
+                                                @foreach($students as $kstudents => $vstudents)
+                                                    <option  value="{{$vstudents->id}}">{{$vstudents->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <small class="form-control-feedback"></small>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- course -->
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5">{{ __('main.course') }} <span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                             <select name="courses_id" class="form-control">
+                                                <option value="" disabled selected>--{{ __('main.choose') }} {{ __('main.course') }}--</option>
+                                                @foreach ($courses as $kcourses => $vcourses)
+                                                    <option value="{{ $vcourses->id }}">{{ $vcourses->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <small class="form-control-feedback"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5"> {{__('main.quiz_score')}} <span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="quiz" required="" placeholder="{{__('main.quiz_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
 
-                                    <!--description-->
                                     <div class="form-group">
-                                       <label class="control-label col-md-5">{{ __('main.description') }}</label>
+                                       <label class="control-label col-md-5"> {{__('main.assignment_score')}} <span class="required">*</span></label>
                                         <div class="col-md-9">
-                                             <textarea name="description" class="form-control" placeholder="{{__('main.description')}}" data-autosize></textarea>
+                                            <input type="text" name="assignment" required="" placeholder="{{__('main.assignment_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
 
-
-                                    <!--status-->    
-                                    <div class="form-body" id="status">
-                                        <div class="form-group">
-                                            <label for="status" class="col-md-5 control-label">{{ __('main.status') }} <span class="required" aria-required="true"> * </span></label>
-                                            <div class="col-md-10">
-                                               <div class="demo-radio-button">
-                                                    <input name="status" type="radio" value="Y" class="with-gap price_type" id="radio_1" checked="" />
-                                                    <label for="radio_1">{{__('main.active')}}</label>
-                                                    <input name="status" type="radio" value="N" class="with-gap price_type" id="radio_2"/>
-                                                    <label for="radio_2">{{__('main.non-active')}}</label>
-                                                </div>
-                                            </div>
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5"> {{__('main.attendance_score')}} <span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="attendance" required="" placeholder="{{__('main.attendance_score')}}" class="form-control">
+                                             <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5"> {{__('main.practice_score')}} <span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="practice" required="" placeholder="{{__('main.practice_score')}}" class="form-control">
+                                             <small class="form-control-feedback"></small>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                       <label class="control-label col-md-5"> {{__('main.final_exam_score')}} <span class="required">*</span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="final_exam" required="" placeholder="{{__('main.final_exam_score')}}" class="form-control">
+                                             <small class="form-control-feedback"></small>
+                                        </div>
+                                    </div>
+
 
                                 </div>
                             </div>
@@ -271,7 +320,13 @@
 @endsection
 
 @push('js')
+    <script src="{{URL::asset("admin_assets/assets/plugins/select2/dist/js/select2.full.min.js")}}" type="text/javascript"></script>
+
     <script type="text/javascript">
+        jQuery(document).ready(function() {
+            $(".select2").select2();
+        });
+
         $(".btn-reload").on("click", function () {
             $(".loading").show("fast");
         });     
@@ -291,146 +346,58 @@
           }
         }
 
-        function status_change(source, id){
-            var url;
-            url = "";
-            if(source == true){
-                $.ajax({
-                    url : "/admin/group_user/change_status_active/"+id,
-                    type: "POST",
-                    data: {"id":id},
-                    contentType: false,
-                    processData: false,
-                    dataType: "JSON",
-                    headers:
-                    {
-                        'X-CSRF-Token': $('input[name="_token"]').val()
-                    },
-                    success: function(data)
-                    {
-
-                        if (data == "error_403") {
-                            $('#modals_confirm').modal('hide');
-                            swal("{{__('main.failed')}}","{{__('main.dont_have_permission')}}","error");
-                        }
-
-                         $.toast({
-                            heading: '{{__('main.success')}}',
-                            text: '{{__('main.data_already_active')}}',
-                            position: 'top-right',
-                            loaderBg:'#ff6849',
-                            icon: data.data_post.class,
-                            hideAfter: 3000, 
-                            stack: 6
-                          });
-                    },
-                    error: function (data)
-                    {
-                    alert('Error adding data');
-                    }
-                });
-            }else{
-                $.ajax({
-                    url : "/admin/group_user/change_status_inactive/"+id,
-                    type: "POST",
-                    data: {"id":id},
-                    contentType: false,
-                    processData: false,
-                    dataType: "JSON",
-                    headers:
-                    {
-                        'X-CSRF-Token': $('input[name="_token"]').val()
-                    },
-                    success: function(data)
-                    {
-
-
-                        if (data == "error_403") {
-                            $('#modals_confirm').modal('hide');
-                            swal("{{__('main.failed')}}","{{__('main.dont_have_permission')}}","error");
-                        }                        
-
-                         $.toast({
-                            heading: '{{__('main.success')}}',
-                            text: '{{__('main.data_inactive')}}',
-                            position: 'top-right',
-                            loaderBg:'#ff6849',
-                            icon: data.data_post.class,
-                            hideAfter: 3000, 
-                            stack: 6
-                          });
-                    },
-                    error: function (data)
-                    {
-                    alert('Error adding data');
-                    }
-                });
-            }
-        }
-
         function add(){
-            // document.getElementById("btnSave").disabled = true;
             save_method = 'add';
-            $('#form_group_user')[0].reset(); // reset form on modals
+            $('#btnSave').text('{{__('main.save')}}'); //change button text
+            $('#form_data_model')[0].reset(); // reset form on modals
             $('.form-group').removeClass('has-danger'); // clear error class
             $('.help-block').empty(); // clear error string
             $('#modal_form').modal('show'); // show bootstrap modal
             $('.modal-title').text('{{ __("main.add") }} {!! $pages_title !!}');
-            // Set Title to Bootstrap modal title
         }
 
         function edited(id){
             save_method = 'update';
-            $('#form_group_user')[0].reset(); // reset form on modals
+            $('#btnSave').text('{{__('main.update')}}'); //change button text
+            $('#form_data_model')[0].reset(); // reset form on modals
             $('.form-group').removeClass('has-danger'); // clear error class
             $('.help-block').empty(); // clear error string
 
             //Ajax Load data from ajax
             $.ajax({
-                url : "{{ url('admin/get_data_byid') }}",
+                url: "{{ url('admin/grades') }}/" + id,
                 type: "GET",
                 dataType: "JSON",
-                data: {"id":id},
-                success: function(result)
-                {
-
-                    $('[name="id"]').val(result.data_divisi.id);
-                    $('[name="name_group"]').val(result.data_divisi.name_group);
-                    $('[name="description"]').val(result.data_divisi.description);
-
-                    var status =result.data_divisi.status;
-                    if(status == 'Y'){
-                        $('#status').find(':radio[name=status][value="Y"]').prop('checked', true);
-                    }else{
-                        $('#status').find(':radio[name=status][value="N"]').prop('checked', true);
+                success: function(result){
+                    if(result.data != null){
+                        $('[name="id"]').val(result.data.id);
+                        $('[name="name"]').val(result.data.name);
+                        $('[name="email"]').val(result.data.email);
+                        $('[name="description"]').val(result.data.description);
+    
+                        $('#modal_form').modal('show');
+                        $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
                     }
-
-                    $('#modal_form').modal('show');
-
-                    $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
-
                 },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
+                error: function (jqXHR, textStatus, errorThrown){
                     alert('Error get data from ajax');
                 }
             });
         }
 
         function save(){
-            $('#btnSave').text('{{__('main.saving')}}...'); //change button text
             $('#btnSave').attr('disabled',true); //set button disable
             var url;
 
             if(save_method == 'add') {
-                url ="{{url('admin/group_user/save')}}";
-                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;Saving ...'); //change button text
+                url ="{{url('admin/grades/save')}}";
+                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;{{__('main.saving')}} ...'); //change button text
             } else {
-                url ="{{url('admin/group_user/update')}}";
-                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;Updated ...'); //change button text
+                url ="{{url('admin/grades/update')}}";
+                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;{{__('main.updated')}} ...'); //change button text
             }
             // ajax adding data to database
-            var formData = new FormData($('#form_group_user')[0]);
+            var formData = new FormData($('#form_data_model')[0]);
 
             $.ajax({
                 url : url,
@@ -439,39 +406,30 @@
                 contentType: false,
                 processData: false,
                 dataType: "JSON",
-                success: function(data)
-                {
-                    if(data.data_post) //if success close modal and reload ajax table
-                        {
-                            $('.loading').show("fast");
-                            $('#modal_form').modal('hide');
-                            $("#notif_success").animate({
-                                    left: "+=50",
-                                    height: "toggle"
-                                }, 100, function() {
-                                });
-
-                             document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+data.data_post['class']+"'>"+ data.data_post['message']+ "</div>";
-
-                            setTimeout(function() {
-                                    $('#notif_success').hide();
-                                }, 1500);
-                            location.reload();
+                success: function(data){
+                    if(data.data_post) {
+                        $('.loading').show("fast");
+                        $('#modal_form').modal('hide');
+                        $("#notif_success").animate({
+                                left: "+=50",
+                                height: "toggle"
+                            }, 100, function() {
+                        });
+                        document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+data.data_post['class']+"'>"+ data.data_post['message']+ "</div>";
+                        setTimeout(function() {
+                                $('#notif_success').hide();
+                        }, 1500);
+                        location.reload();
+                    }else{
+                        for (var i = 0; i < data.inputerror.length; i++){
+                            $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger'); //select parent twice to select div form-group class and add has-danger class
+                            $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
                         }
-                    else
-                    {
-                            for (var i = 0; i < data.inputerror.length; i++)
-                            {
-                                $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger'); //select parent twice to select div form-group class and add has-danger class
-                                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-                            }
                     }
                     $('#btnSave').text('{{__('main.save')}}'); //change button text
                     $('#btnSave').attr('disabled',false); //set button enable
                 },
-                error: function (data)
-                {
-                    // console.log(data);
+                error: function (data){
                     alert('Error adding data');
                     $('#btnSave').text('{{__('main.save')}}'); //change button text
                     $('#btnSave').attr('disabled',false); //set button enable
@@ -494,7 +452,7 @@
                 },
                  function(isConfirm){
                    if (isConfirm) {
-                    var url ="{{url('admin/group_user/deleted')}}";
+                    var url ="{{url('admin/grades/deleted')}}";
                     $.ajax({
                         url : url,
                         type: "POST",
@@ -504,27 +462,22 @@
                         {
                             'X-CSRF-Token': $('input[name="_token"]').val()
                         },
-                        success: function(result)
-                        {
-                             if(result.data_post.status) //if success close modal and reload ajax table
-                            {   
+                        success: function(result){
+                             if(result.data_post.status){   
                                 swal("{{ __('main.done') }}","{{ __('main.done_detail') }}","success");
                                 $("#notif_success").animate({
                                         left: "+=50",
                                         height: "toggle"
                                     }, 100, function() {
-                                    });
+                                });
                                 document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+result.data_post['class']+"'>{{__('main.data_succesfully_deleted')}}</div>";
-
                                 setTimeout(function() {
                                         $('#notif_success').hide();
-                                    }, 1500);
-                               $("#tr_"+id).remove();
+                                }, 1500);
+                                $("#tr_"+id).remove();
                             }
                         },
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            console.log(url);
+                        error: function (jqXHR, textStatus, errorThrown){
                             alert('Error deleting data');
                         }
                     });
@@ -555,13 +508,16 @@
                             if (jQuery(this).is(":checked")) {
                                 var id = this.id;
                                 var splitid = id.split('_');
-                                var postid = splitid[1];
-                                post_arr.push(postid);
+                                if(splitid != ''){
+                                    var postid = splitid[1];
+                                    post_arr.push(postid);
+                                }
                             }
                         });
 
+
                         if(post_arr.length > 0){
-                            var url ="/admin/group_user/deleted_all/"+post_arr;
+                            var url ="/admin/grades/deleted_all/"+post_arr;
 
                             // AJAX Request
                             $.ajax({
@@ -573,20 +529,16 @@
                                     'X-CSRF-Token': $('input[name="_token"]').val()
                                 },
                                 success: function(result){
-
                                     swal("{{ __('main.done') }}","{{ __('main.done_detail') }}","success");
                                     $.each(post_arr, function( i,l ){
                                         $("#tr_"+l).remove();
                                     });
-
                                     $("#notif_success").animate({
                                             left: "+=50",
                                             height: "toggle"
                                         }, 100, function() {
                                      });
-
                                     document.getElementById("notif_success").innerHTML ="<div class='alert alert-danger'>{{__('main.data_succesfully_deleted')}}</div>";
-
                                     setTimeout(function() {
                                             $('#notif_success').hide();
                                     }, 1500);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Student;
+use App\Faculty;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use DB;
@@ -33,19 +34,25 @@ class StudentController extends Controller
         $operator_filter    = $request->get('operator_filter');
         $text_filter        = $request->get('text_filter');
 
-        $row = new Student;
-        $datas = $row->get_data();
-        
+        $query = Student::where('status', 'Y')
+        ->orderBy('name')
+        ->whereHas('faculties')
+        ->with(['faculties' => function ($query) {
+            $query->orderBy('name', 'desc');
+        }]);
+    
         if ($text_filter !== false && $operator_filter == "LIKE"){
-            $datas->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
+            $query->where('students.'.$field_filter.'','LIKE','%'.$text_filter.'%');        
         }else if ($text_filter !== false && $operator_filter == "="){
-            $datas->where('students.'.$field_filter.'', '=', "".$text_filter."");      
+            $query->where('students.'.$field_filter.'', '=', "".$text_filter."");      
         }
 
-        $datas->orderBy('id','DESC');
-        $rows = $datas->paginate(10);
+        $query->orderBy('id','DESC');
+        $rows = $query->paginate(10);
 
-        return view('backend.'.$this->controller.'.list', compact('rows'))->with(array('controller' => $this->controller, 'pages_title' => $this->title(), 'text_filter' => $text_filter , 'operator_filter' => $operator_filter, 'field_filter' => $field_filter));
+        $faculties = Faculty::get();
+
+        return view('backend.'.$this->controller.'.list', compact('rows','faculties'))->with(array('controller' => $this->controller, 'pages_title' => $this->title(), 'text_filter' => $text_filter , 'operator_filter' => $operator_filter, 'field_filter' => $field_filter));
     }
 
     private function _validate_data(Request $request){
@@ -55,15 +62,18 @@ class StudentController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if($request->name == '')
-        {
+        if($request->name == ''){
             $data['inputerror'][] = 'name';
             $data['error_string'][] = 'Name is required';
             $data['status'] = FALSE;
         }
+        if($request->faculties_id == ''){
+            $data['inputerror'][] = 'faculties_id';
+            $data['error_string'][] = 'Faculty is required';
+            $data['status'] = FALSE;
+        }
 
-        if($data['status'] === FALSE)
-        {
+        if($data['status'] === FALSE){
             echo json_encode($data);
             exit();
         }
@@ -82,12 +92,12 @@ class StudentController extends Controller
 
         StudentController::_validate_data($request);
 
-        $pk = new Student;
-        $pk->name           = $request->name;
-        $pk->email          = $request->email;
-        $pk->description    = $request->description;
-        $pk->status         = $request->status;
-        $pk->save();
+        $mod = new Student;
+        $mod->name           = $request->name;
+        $mod->faculties_id   = $request->faculties_id;
+        $mod->description    = $request->description;
+        $mod->status         = $request->status;
+        $mod->save();
 
         $result=array(
                 "data_post"=>array(
@@ -107,12 +117,12 @@ class StudentController extends Controller
 
         StudentController::_validate_data($request);
 
-        $pk = Student::find($request->id);
-        $pk->name           = $request->name;
-        $pk->email          = $request->email;
-        $pk->description    = $request->description;
-        $pk->status         = $request->status;
-        $pk->save();
+        $mod = Student::find($request->id);
+        $mod->name           = $request->name;
+        $mod->faculties_id   = $request->faculties_id;
+        $mod->description    = $request->description;
+        $mod->status         = $request->status;
+        $mod->save();
 
         $result=array(
                 "data_post"=>array(
@@ -131,9 +141,9 @@ class StudentController extends Controller
         }
 
 
-        $pk = Student::find($id);
-        $pk->status = "Y";
-        $pk->save();
+        $mod = Student::find($id);
+        $mod->status = "Y";
+        $mod->save();
         $result=array(
                 "data_post"=>array(
                 "status"=>TRUE,
@@ -151,9 +161,9 @@ class StudentController extends Controller
             return  json_encode("error_403");
         }
 
-        $pk = Student::find($id);
-        $pk->status = "N";
-        $pk->save();
+        $mod = Student::find($id);
+        $mod->status = "N";
+        $mod->save();
         $result=array(
                 "data_post"=>array(
                 "status"=>TRUE,
@@ -171,8 +181,8 @@ class StudentController extends Controller
         }
 
 
-        $pk = Student::find($request->id);
-        $pk->delete();
+        $mod = Student::find($request->id);
+        $mod->delete();
         $result=array(
                 "data_post"=>array(
                     "status"=>TRUE,

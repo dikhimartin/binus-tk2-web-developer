@@ -67,7 +67,7 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <button class="btn btn-info btn-sm waves-light btn-search" type="submit"><span class="btn-label"><i class="fa fa-search"></i></span>&nbsp;{{__('search')}}
+                                                <button class="btn btn-info btn-sm waves-light btn-search" type="submit"><span class="btn-label"><i class="fa fa-search"></i></span>&nbsp;{{__('main.search')}}
                                                 </button>
 
                                                 <a href="{{ LaravelLocalization::getLocalizedURL(LaravelLocalization::getCurrentLocale(),URL::to( 'admin/'.$controller )) }}" class="btn btn-warning btn-sm btn-reload" data-toggle="tooltip" data-placement="top" title="{{__('main.reload')}}">
@@ -129,9 +129,8 @@
                                             <span class="custom-control-label"></span>
                                         </label>
                                     </td>
-                                    <td>No.</th>
                                     <td>{{__('main.name')}}</td>
-                                    <td>{{__('main.email')}}</td>
+                                    <td>{{__('main.faculty')}}</td>
                                     <td>{{__('main.description')}}</td>
                                     <td>{{__('main.status')}}</td>
                                     <td>{{__('main.action')}}</td>
@@ -139,11 +138,9 @@
                             </thead>
                             <tbody>
                             @if ($rows->isEmpty())
-                                <td colspan="7" class="text-center alert-danger">{{__('main.data_empty')}}</td>
+                                <td colspan="6" class="text-center alert-danger">{{__('main.data_empty')}}</td>
                             @else
-                                <?php $no = ($rows->currentPage() - 1) * $rows->perPage(); ?>
                                 @foreach ($rows as $key => $value)
-                                    <?php $no++; ?>
                                     <tr id='tr_{{$value->id}}'>
                                         <td width="10">
                                             <label class="custom-control custom-checkbox">
@@ -151,10 +148,8 @@
                                                 <span class="custom-control-label"></span>
                                             </label>
                                         </td>
-                                        <td width="10">{!! $no !!}
-                                        </td>
                                         <td>{{$value->name}}</td>
-                                        <td>{{$value->email}}</td>
+                                        <td>{{$value->faculties->name}}</td>
                                         <td>{{$value->description}}</td>
                                         <td>
                                         <div class="switch">
@@ -228,13 +223,19 @@
                                              <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
-
-                                    <!--email-->
+                                    
+                                    <!-- faculty -->
                                     <div class="form-group">
-                                       <label class="control-label col-md-5">{{ __('main.email') }} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5">{{ __('main.faculty') }} <span class="required">*</span></label>
                                         <div class="col-md-9">
-                                            <input type="email" name="email" required="" placeholder="{{__('main.email')}}" class="form-control">
-                                             <small class="form-control-feedback"></small>
+                                             <select name="faculties_id" class="form-control">
+                                                <option value="" disabled selected>--{{ __('main.choose') }} {{ __('main.faculty') }}--</option>
+                                                @foreach ($faculties as $kfaculties => $vfaculties)
+                                                    <option value="{{ $vfaculties->id }}">{{ $vfaculties->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
 
@@ -423,16 +424,15 @@
         }
 
         function save(){
-            $('#btnSave').text('{{__('main.saving')}}...'); //change button text
             $('#btnSave').attr('disabled',true); //set button disable
             var url;
 
             if(save_method == 'add') {
                 url ="{{url('admin/students/save')}}";
-                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;Saving ...'); //change button text
+                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;{{__('main.saving')}} ...'); //change button text
             } else {
                 url ="{{url('admin/students/update')}}";
-                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;Updated ...'); //change button text
+                $('#btnSave').html('<i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;{{__('main.updated')}} ...'); //change button text
             }
             // ajax adding data to database
             var formData = new FormData($('#form_data_model')[0]);
@@ -444,40 +444,31 @@
                 contentType: false,
                 processData: false,
                 dataType: "JSON",
-                success: function(data)
-                {
-                    if(data.data_post) //if success close modal and reload ajax table
-                        {
-                            $('.loading').show("fast");
-                            $('#modal_form').modal('hide');
-                            $("#notif_success").animate({
-                                    left: "+=50",
-                                    height: "toggle"
-                                }, 100, function() {
-                                });
+                success: function(data){
+                    if(data.data_post) {
+                        $('.loading').show("fast");
+                        $('#modal_form').modal('hide');
+                        $("#notif_success").animate({
+                                left: "+=50",
+                                height: "toggle"
+                            }, 100, function() {
+                        });
+                        document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+data.data_post['class']+"'>"+ data.data_post['message']+ "</div>";
 
-                             document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+data.data_post['class']+"'>"+ data.data_post['message']+ "</div>";
-
-                            setTimeout(function() {
-                                    $('#notif_success').hide();
-                                }, 1500);
-                            location.reload();
+                        setTimeout(function() {
+                                $('#notif_success').hide();
+                        }, 1500);
+                        location.reload();
+                    } else{
+                        for (var i = 0; i < data.inputerror.length; i++){
+                            $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger'); //select parent twice to select div form-group class and add has-danger class
+                            $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
                         }
-                    else
-                    {
-                            for (var i = 0; i < data.inputerror.length; i++)
-                            {
-                                $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger'); //select parent twice to select div form-group class and add has-danger class
-                                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-                            }
                     }
                     $('#btnSave').text('{{__('main.save')}}'); //change button text
                     $('#btnSave').attr('disabled',false); //set button enable
                 },
-                error: function (data)
-                {
-                    // console.log(data);
-                    alert('Error adding data');
+                error: function (data){
                     $('#btnSave').text('{{__('main.save')}}'); //change button text
                     $('#btnSave').attr('disabled',false); //set button enable
                 }
@@ -509,32 +500,28 @@
                         {
                             'X-CSRF-Token': $('input[name="_token"]').val()
                         },
-                        success: function(result)
-                        {
-                             if(result.data_post.status) //if success close modal and reload ajax table
-                            {   
+                        success: function(result){
+                             if(result.data_post.status){   
                                 swal("{{ __('main.done') }}","{{ __('main.done_detail') }}","success");
                                 $("#notif_success").animate({
                                         left: "+=50",
                                         height: "toggle"
                                     }, 100, function() {
-                                    });
+                                });
                                 document.getElementById("notif_success").innerHTML ="<div class='alert alert-"+result.data_post['class']+"'>{{__('main.data_succesfully_deleted')}}</div>";
-
                                 setTimeout(function() {
                                         $('#notif_success').hide();
-                                    }, 1500);
-                               $("#tr_"+id).remove();
+                                }, 1500);
+                                $("#tr_"+id).remove();
                             }
                         },
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
+                        error: function (jqXHR, textStatus, errorThrown){
                             console.log(url);
                             alert('Error deleting data');
                         }
                     });
                   }else{
-                        swal("{{ __('main.cancelled') }}", "{{ __('main.cancelled_detail') }}", "error");
+                    swal("{{ __('main.cancelled') }}", "{{ __('main.cancelled_detail') }}", "error");
                   } 
                })
         }

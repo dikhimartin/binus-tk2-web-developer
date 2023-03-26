@@ -23,7 +23,6 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 		'as'=>'students.index',
 		'uses'=>'StudentController@index',
 	]);
-	// Route::get('/get_students_data_byid','StudentController@get_data_byid');
 	Route::get('/students/{id}','StudentController@get_data_byid');
 	Route::post('/students/save','StudentController@save');
 	Route::post('/students/update','StudentController@update');
@@ -35,17 +34,14 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 	// grades
 	Route::get('grades',
 	[
-		'as'=>'group_user.index',
-		'uses'=>'GroupUserController@index',
+		'as'=>'grades.index',
+		'uses'=>'GradeController@index',
 	]);
-	Route::get('/get_grades_data','GroupUserController@get_group_user_data');
-	Route::get('/get_grades_data_byid','GroupUserController@get_group_user_data_byid');
-	Route::post('/grades/save','GroupUserController@save');
-	Route::post('/grades/update','GroupUserController@update');
-	Route::post('/grades/change_status_active/{id}','GroupUserController@change_status_active');
-	Route::post('/grades/change_status_inactive/{id}','GroupUserController@change_status_inactive');
-	Route::post('/grades/deleted_all/{id}','GroupUserController@delete_all');
-	Route::post('/grades/deleted','GroupUserController@delete');
+	Route::get('/grades/{id}','GradeController@get_data_byid');
+	Route::post('/grades/save','GradeController@save');
+	Route::post('/grades/update','GradeController@update');
+	Route::post('/grades/deleted_all/{id}','GradeController@delete_all');
+	Route::post('/grades/deleted','GradeController@delete');
 
 
 	/*
