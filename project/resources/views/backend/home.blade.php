@@ -21,23 +21,24 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 @endsection
 
 @section('vendor_js')
-  <script src="{{ URL::asset('admin_assets/assets/plugins/toast-master/js/jquery.toast.js') }}"></script>
-  <script type="text/javascript">
-        @if (session()->has('success'))
-             $.toast({
-                heading: 'Welcome {{ $data_user->name }}',
-                text: '{!! session()->get('success') !!}',
-                position: 'top-right',
-                loaderBg:'#ff6849',
-                icon: 'info',
-                hideAfter: 5500, 
-                stack: 6
-              });
-        @endif
-  </script>
+    <script type="text/javascript">
+            @if (session()->has('success'))
+                $.toast({
+                    heading: 'Welcome {{ $data_user->name }}',
+                    text: '{!! session()->get('success') !!}',
+                    position: 'top-right',
+                    loaderBg:'#ff6849',
+                    icon: 'info',
+                    hideAfter: 5500, 
+                    stack: 6
+                });
+            @endif
+    </script>
 @endsection
