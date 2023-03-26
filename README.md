@@ -1,8 +1,8 @@
-[![Laravel Logo](https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg)](https://tk2.binusassignment.tech)
+[![Laravel Logo](https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg)](https://gradeapp.binusassignment.tech)
 
 
 
-Demo : [https://tk2.binusassignment.tech](https://tk2.binusassignment.tech/)
+Demo : [https://gradeapp.binusassignment.tech](https://gradeapp.binusassignment.tech)
 
 # Grade App -  (Team Assignment 2)
 
@@ -100,7 +100,7 @@ source : 20220629155011_TK2-W4-S5-R1
 
 - Akses Login 
 
-  - Username : binusian
+  - Username  : binusian
   - Password  : binusian
 
 **Note :** 
@@ -115,14 +115,4 @@ docker-compose up restart myapp
   ```shell
    docker-compose exec myapp bash
   ```
-
 ------
-
-
-Proses Pengerjaan 
-
-php artisan make:model Student -m 
-php artisan make:model Grade -m
-
-php artisan make:controller StudentController 
-php artisan make:controller GradeController
