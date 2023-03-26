@@ -87,6 +87,17 @@
                 </div>
             </div>
 
+            <div class="col-md-12">
+                <div class="alert alert-warning" role="alert">
+                    <h4 class="alert-heading">Ketentuan penilaian grade:</h4>
+                    <span><i class="mdi mdi-checkbox-marked-circle text-info"></i>&nbsp;Nilai <= 65  &nbsp;= <b class='text-danger'>D</b></span></br>
+                    <span><i class="mdi mdi-checkbox-marked-circle text-info"></i>&nbsp;Nilai <= 75  &nbsp;= <b class='text-warning'>C</b></span></br>
+                    <span><i class="mdi mdi-checkbox-marked-circle text-info"></i>&nbsp;Nilai <= 85  &nbsp;= <b class='text-info'>B</b></span></br>
+                    <span><i class="mdi mdi-checkbox-marked-circle text-info"></i>&nbsp;Nilai <= 100 = <b class='text-success'>A</b></span></br>
+                </div>
+            </div>
+
+
             <!-- Data -->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card-header bg-info text-white">
@@ -137,12 +148,28 @@
                                     <td rowspan="2">Fakultas</td>
                                     <td rowspan="2">Mata Kuliah</td>
                                     <td style="text-align: center;" colspan="7">Informasi Nilai</td>
+                                    <td rowspan="2">Action</td>
                                     <tr class="bg-secondary text-white">
-                                        <td>Nilai Quiz</td>
-                                        <td>Nilai Tugas</td>
-                                        <td>Nilai Absensi</td>
-                                        <td>Nilai praktek</td>
-                                        <td>Nilai UAS</td>
+                                        <td>
+                                            Nilai Quiz  
+                                            (20%)
+                                        </td>
+                                        <td>
+                                            Nilai Tugas 
+                                            (20%)
+                                        </td>
+                                        <td>
+                                            Nilai Absensi 
+                                            (10%)
+                                        </td>
+                                        <td>
+                                            Nilai praktek 
+                                            (20%)
+                                        </td>
+                                        <td>
+                                            Nilai UAS 
+                                            (30%)
+                                        </td>
                                         <td>Total&nbsp;</td>
                                         <td>Grade</td>
                                     </tr>
@@ -171,22 +198,24 @@
                                         <td>{{$value->attendance}}</td>
                                         <td>{{$value->practice}}</td>
                                         <td>{{$value->final_exam}}</td>
-                                        <td>{{$value->total_score}}</td>
                                         <td class='text-info font-weight-bold'>
-                                            {{$value->grade}}
+                                            {{$value->total_score}}
                                         </td>
-                                        <!-- <td>
+                                        <td class="{{ getGradeClass($value->grade) }} font-weight-bold">
+                                            {{ $value->grade }}
+                                        </td>
+                                        <td>
                                             <div class="hidden-sm hidden-sm action-buttons center">
                                                 @permission('grades-edit')
-                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="edited(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-info"data-toggle="tooltip" data-placement="top" title="{{__('main.edit')}}"><i class="fa fa-pencil"></i>
+                                                   <a href="javascript:void(0)" onclick="edited(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-info"data-toggle="tooltip" data-placement="top" title="{{__('main.edit')}}"><i class="fa fa-pencil"></i>
                                                     </a>
                                                 @endpermission
                                                 @permission('grades-delete')
-                                                    <a href="javascript:void(0)"> <a href="javascript:void(0)" onclick="removed(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-danger"data-toggle="tooltip" data-placement="top" title="{{__('main.delete')}}"><i class="fa fa-trash"></i>
+                                                     <a href="javascript:void(0)" onclick="removed(`{{$value->id}}`)" class="btn waves-effect waves-light btn-rounded btn-sm btn-danger"data-toggle="tooltip" data-placement="top" title="{{__('main.delete')}}"><i class="fa fa-trash"></i>
                                                     </a>
                                                 @endpermission
                                             </div>
-                                        </td> -->
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -209,6 +238,7 @@
             </div>
         </div>
     </div>
+
     <!-- Form Modal -->
     <div class="modal fade col-md-12" id="modal_form" role="dialog" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-lg">
@@ -232,7 +262,14 @@
 
                                     <input type="hidden" value="" name="id" id="id" />
 
-                                    <div class="form-group">
+                                    <div class="form-group" id="name_students" style="display:none;">
+                                        <label class="control-label col-md-5">Mahasiswa</label>
+                                        <div class="col-md-9">
+                                            <input type="text" name="name_students" class="form-control" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="students_id">
                                         <label class="control-label col-md-5">Pilih Mahasiswa <span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <select name="students_id" class="form-control select2">
@@ -260,9 +297,17 @@
                                             <small class="form-control-feedback"></small>
                                         </div>
                                     </div>
+                                    
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            <div class="alert alert-info">
+                                                Format inputan nilai berupa angka 1 sampai dengan 100
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
-                                       <label class="control-label col-md-5"> {{__('main.quiz_score')}} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5"> {{__('main.quiz_score')}} <small class="text-info">(20%)</small><span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="text" name="quiz" required="" placeholder="{{__('main.quiz_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
@@ -270,7 +315,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="control-label col-md-5"> {{__('main.assignment_score')}} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5"> {{__('main.assignment_score')}} <small class="text-info">(20%)</small><span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="text" name="assignment" required="" placeholder="{{__('main.assignment_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
@@ -278,7 +323,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="control-label col-md-5"> {{__('main.attendance_score')}} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5"> {{__('main.attendance_score')}} <small class="text-info">(10%)</small><span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="text" name="attendance" required="" placeholder="{{__('main.attendance_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
@@ -286,7 +331,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="control-label col-md-5"> {{__('main.practice_score')}} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5"> {{__('main.practice_score')}} <small class="text-info">(20%)</small><span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="text" name="practice" required="" placeholder="{{__('main.practice_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
@@ -294,7 +339,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                       <label class="control-label col-md-5"> {{__('main.final_exam_score')}} <span class="required">*</span></label>
+                                       <label class="control-label col-md-5"> {{__('main.final_exam_score')}} <small class="text-info">(30%)</small><span class="required">*</span></label>
                                         <div class="col-md-9">
                                             <input type="text" name="final_exam" required="" placeholder="{{__('main.final_exam_score')}}" class="form-control">
                                              <small class="form-control-feedback"></small>
@@ -327,6 +372,55 @@
             $(".select2").select2();
         });
 
+        $(document).ready(function() {
+            $('input[name="quiz"]').on('input', function() {
+                var value = $(this).val();
+                if (value !== '') {
+                    var num = parseInt(value);
+                    if (isNaN(num) || num < 0 || num > 100) {
+                        $(this).val('');
+                    }
+                }
+            });
+            $('input[name="assignment"]').on('input', function() {
+                var value = $(this).val();
+                if (value !== '') {
+                    var num = parseInt(value);
+                    if (isNaN(num) || num < 0 || num > 100) {
+                        $(this).val('');
+                    }
+                }
+            });
+            $('input[name="attendance"]').on('input', function() {
+                var value = $(this).val();
+                if (value !== '') {
+                    var num = parseInt(value);
+                    if (isNaN(num) || num < 0 || num > 100) {
+                        $(this).val('');
+                    }
+                }
+            });
+            $('input[name="practice"]').on('input', function() {
+                var value = $(this).val();
+                if (value !== '') {
+                    var num = parseInt(value);
+                    if (isNaN(num) || num < 0 || num > 100) {
+                        $(this).val('');
+                    }
+                }
+            });
+            $('input[name="final_exam"]').on('input', function() {
+                var value = $(this).val();
+                if (value !== '') {
+                    var num = parseInt(value);
+                    if (isNaN(num) || num < 0 || num > 100) {
+                        $(this).val('');
+                    }
+                }
+            });
+        });
+
+
         $(".btn-reload").on("click", function () {
             $(".loading").show("fast");
         });     
@@ -348,6 +442,8 @@
 
         function add(){
             save_method = 'add';
+            $('#students_id').show();
+            $('#name_students').hide();
             $('#btnSave').text('{{__('main.save')}}'); //change button text
             $('#form_data_model')[0].reset(); // reset form on modals
             $('.form-group').removeClass('has-danger'); // clear error class
@@ -370,11 +466,20 @@
                 dataType: "JSON",
                 success: function(result){
                     if(result.data != null){
+                        $('#name_students').show();
+                        $('#students_id').hide();
+                        
                         $('[name="id"]').val(result.data.id);
-                        $('[name="name"]').val(result.data.name);
-                        $('[name="email"]').val(result.data.email);
-                        $('[name="description"]').val(result.data.description);
-    
+                        $('[name="quiz"]').val(result.data.quiz);
+                        $('[name="assignment"]').val(result.data.assignment);
+                        $('[name="attendance"]').val(result.data.attendance);
+                        $('[name="practice"]').val(result.data.practice);
+                        $('[name="final_exam"]').val(result.data.final_exam);
+                        
+                        $('[name="courses_id"] option[value='+result.data.courses_id+']').prop('selected',false);
+                        $('[name="courses_id"] option[value='+result.data.courses_id+']').prop('selected',true);
+                        $('[name="name_students"]').val(result.data.students.name);
+                        
                         $('#modal_form').modal('show');
                         $('.modal-title').text('{{ __("main.edit") }} {!! $pages_title !!}');
                     }

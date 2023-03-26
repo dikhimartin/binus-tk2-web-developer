@@ -55,17 +55,18 @@ class GradeController extends Controller
         return view('backend.'.$this->controller.'.list', compact('rows','students','courses'))->with(array('controller' => $this->controller, 'pages_title' => $this->title(), 'text_filter' => $text_filter , 'operator_filter' => $operator_filter, 'field_filter' => $field_filter));
     }
 
-    private function _validate_data(Request $request){
-
+    private function _validate_data(Request $request, $action){
         $data = array();
         $data['error_string'] = array();
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        if($request->students_id == ''){
-            $data['inputerror'][] = 'students_id';
-            $data['error_string'][] = 'Student is required';
-            $data['status'] = FALSE;
+        if($action == "create"){
+            if($request->students_id == ''){
+                $data['inputerror'][] = 'students_id';
+                $data['error_string'][] = 'Student is required';
+                $data['status'] = FALSE;
+            }
         }
         if($request->courses_id == ''){
             $data['inputerror'][] = 'courses_id';
@@ -116,7 +117,7 @@ class GradeController extends Controller
         $data['inputerror'] = array();
         $data['status'] = TRUE;
 
-        GradeController::_validate_data($request);
+        GradeController::_validate_data($request, "create");
 
         $mod = new Grade;
         $mod->students_id = $request->students_id;
@@ -128,7 +129,7 @@ class GradeController extends Controller
         $mod->final_exam = $request->final_exam;
 
         // Hitung total nilai
-        $total_score = ($mod->quiz * 0.2) + ($mod->assignment * 0.2) + ($mod->attendance * 0.1) + ($mod->practice * 0.3) + ($mod->final_exam * 0.2);
+        $total_score = ($mod->quiz * 0.2) + ($mod->assignment * 0.2) + ($mod->attendance * 0.1) + ($mod->practice * 0.2) + ($mod->final_exam * 0.3);
         $mod->total_score = $total_score;
 
         // Hitung grade
@@ -161,9 +162,10 @@ class GradeController extends Controller
             return  json_encode("error_403");
         }
 
-        GradeController::_validate_data($request);
+        GradeController::_validate_data($request, 'update');
 
         $mod = Grade::find($request->id);
+        $mod->courses_id = $request->courses_id;
         $mod->quiz = $request->quiz;
         $mod->assignment = $request->assignment;
         $mod->attendance = $request->attendance;
@@ -171,7 +173,7 @@ class GradeController extends Controller
         $mod->final_exam = $request->final_exam;
 
         // Hitung total nilai
-        $total_score = ($mod->quiz * 0.2) + ($mod->assignment * 0.2) + ($mod->attendance * 0.1) + ($mod->practice * 0.3) + ($mod->final_exam * 0.2);
+        $total_score = ($mod->quiz * 0.2) + ($mod->assignment * 0.2) + ($mod->attendance * 0.1) + ($mod->practice * 0.2) + ($mod->final_exam * 0.3);
         $mod->total_score = $total_score;
 
         // Hitung grade
@@ -204,8 +206,7 @@ class GradeController extends Controller
             echo json_encode("error_403");
         }
 
-
-        $mod = Student::find($request->id);
+        $mod = Grade::find($request->id);
         $mod->delete();
         $result=array(
                 "data_post"=>array(
@@ -223,7 +224,7 @@ class GradeController extends Controller
         }
 
 
-        DB::table("students")->whereIn('id',explode(",",$id))->delete();
+        DB::table("grades")->whereIn('id',explode(",",$id))->delete();
 
         $result=array(
                 "data_post"=>array(
@@ -241,9 +242,11 @@ class GradeController extends Controller
             echo json_encode("error_403");
         }
 
-        $data = DB::table('students')->select('students.*')
-        ->where('id',$id)
-        ->first();
+        $data = Grade::where('id', $id)
+        ->whereHas('courses')
+        ->whereHas('students.faculties')
+        ->with(['courses'])
+        ->with(['students.faculties'])->first();
 
         $data_return =array('data'=>$data);
         return response()->json($data_return);
