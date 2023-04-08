@@ -86,42 +86,6 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => '2023-03-17 14:24:23'
             ],
             [
-                'id' => 9,
-                'name' => 'group_user-list',
-                'display_name' => 'Group List',
-                'description' => 'Group List',
-                'sort' => 1,
-                'created_at' => '2023-03-17 14:24:23',
-                'updated_at' => '2023-03-17 14:24:23'
-            ],
-            [
-                'id' => 10,
-                'name' => 'group_user-create',
-                'display_name' => 'Group Create',
-                'description' => 'Group Create',
-                'sort' => 1,
-                'created_at' => '2023-03-17 14:24:23',
-                'updated_at' => '2023-03-17 14:24:23'
-            ],
-            [
-                'id' => 11,
-                'name' => 'group_user-edit',
-                'display_name' => 'Group Edit',
-                'description' => 'Group Edit',
-                'sort' => 1,
-                'created_at' => '2023-03-17 14:24:23',
-                'updated_at' => '2023-03-17 14:24:23'
-            ],
-            [
-                'id' => 12,
-                'name' => 'group_user-delete',
-                'display_name' => 'Group Delete',
-                'description' => 'Group Delete',
-                'sort' => 1,
-                'created_at' => '2023-03-17 14:24:23',
-                'updated_at' => '2023-03-17 14:24:23'
-            ],
-            [
                 'id' => 13,
                 'name' => 'students-list',
                 'display_name' => 'Students List',

@@ -16,6 +16,7 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 	*/
 	Route::get('/dashboard', 'HomeController@index')->name('home');
 	Route::post('/dashboard/report/grade-courses', 'HomeController@get_grade_courses');
+	Route::post('/dashboard/report/grade-students', 'HomeController@get_grade_students');
 
 
 	/*
@@ -75,21 +76,6 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'nam
 	Route::post('save_users','UsersController@save_users');
 	Route::post('update_users','UsersController@update_users');
 	Route::post('deleted_users','UsersController@deleted_users');
-
-
-	// Group User
-	Route::get('group_user',
-	[
-		'as'=>'group_user.index',
-		'uses'=>'GroupUserController@index',
-	]);
-	Route::get('/get_group_user_data_byid','GroupUserController@get_group_user_data_byid');
-	Route::post('/group_user/save','GroupUserController@save');
-	Route::post('/group_user/update','GroupUserController@update');
-	Route::post('/group_user/change_status_active/{id}','GroupUserController@change_status_active');
-	Route::post('/group_user/change_status_inactive/{id}','GroupUserController@change_status_inactive');
-	Route::post('/group_user/deleted_all/{id}','GroupUserController@delete_all');
-	Route::post('/group_user/deleted','GroupUserController@delete');
 
 
 	// Users Role

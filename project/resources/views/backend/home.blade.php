@@ -25,28 +25,37 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex no-block">
-                            <h4 class="card-title">Nilai Mahasiswa<br><small class="text-muted">Berdasarkan matakuliah</small></h4>
+                            <h4 class="card-title">Grafik Grade<br><small class="text-muted">Berdasarkan matakuliah</small></h4>
                             <div class="ml-auto">
                                 <select name="course_id" class="form-control" onclick="chart_courses()">
                                     <option value="" disabled selected>--{{ __('main.choose') }} {{ __('main.course') }}--</option>
-                                    @foreach ($data_courses as $kcourse => $vcourse)
-                                        <option value="{{ $vcourse->courses_id }}">{{ $vcourse->courses->name }}
+                                    @foreach ($courses as $key => $value)
+                                        <option value="{{ $value->courses_id }}">{{ $value->courses->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div id="grade-courses"></div>
+                        <div id="chart-courses"></div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-6">
+            <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-body">        
-                        <!-- <div id="grade-coursesa"></div> -->
+                    <div class="card-body">
+                        <div class="d-flex no-block">
+                            <h4 class="card-title">Grafik Grade<br><small class="text-muted">Berdasarkan mahasiswa</small></h4>
+                            <div class="ml-auto">
+                                <select name="student_id" class="form-control" onclick="chart_students()">
+                                    <option value="" disabled selected>--{{ __('main.choose') }} {{ __('main.students') }}--</option>
+                                    @foreach ($students as $key => $value)
+                                        <option value="{{ $value->students_id }}">{{ $value->students->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div id="chart-students"></div>
                     </div>
                 </div>
             </div>
@@ -70,7 +79,6 @@
                 });
             @endif
 
-
             // ChartCourses
             function chart_courses(){
                 var course_id = $("select[name=course_id]").val();
@@ -85,7 +93,7 @@
                         'X-CSRF-Token': $('input[name="_token"]').val()
                     },
                     success: function(response){
-                        Highcharts.chart('grade-courses', {
+                        Highcharts.chart('chart-courses', {
                             chart: {
                                 type: 'column'
                             },
@@ -123,10 +131,66 @@
                         });
                     },
                     error: function (response){
-                        alert(data);
+                        alert(response);
                     }
                 })                
-
+            }
+            
+            function chart_students(){
+                var student_id = $("select[name=student_id]").val();
+                var student_name = $("select[name=student_id]").find('option:selected').text();
+                
+                $.ajax({
+                    url : "dashboard/report/grade-students",
+                    type: "POST",
+                    dataType: "JSON",
+                    data: {"student_id":student_id},
+                    headers:
+                    {
+                        'X-CSRF-Token': $('input[name="_token"]').val()
+                    },
+                    success: function(response){
+                        console.log(response);
+                        Highcharts.chart('chart-students', {
+                            chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false,
+                                type: 'pie'
+                            },
+                            title: {
+                                text: student_name,
+                                align: 'left'
+                            },
+                            tooltip: {
+                                pointFormat: '{series.name}: <b>{point.y} ({point.grade})</b>'
+                            },
+                            accessibility: {
+                                point: {
+                                    valueSuffix: '%'
+                                }
+                            },
+                            plotOptions: {
+                                pie: {
+                                    allowPointSelect: true,
+                                    cursor: 'pointer',
+                                    dataLabels: {
+                                        enabled: false
+                                    },
+                                    showInLegend: true
+                                }
+                            },
+                            series: [{
+                                name: 'Grades',
+                                colorByPoint: true,
+                                data: response.data
+                            }]
+                        });
+                    },
+                    error: function (response){
+                        alert(response);
+                    }
+                })                
             }
 
     </script>

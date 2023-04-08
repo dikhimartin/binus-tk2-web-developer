@@ -36,12 +36,12 @@ class HomeController extends Controller
         ->where('users.id_users',Auth::user()->id_users)
       ->first();
 
-      // $data_courses = Course::get();
 
-      $data_courses = Grade::whereHas('courses')->with(['courses'])->groupBy('courses_id')->get();
+      $courses = Grade::whereHas('courses')->with(['courses'])->groupBy('courses_id')->get();
 
+      $students = Grade::whereHas('students')->with(['students'])->groupBy('students_id')->get();
 
-      return view('backend.home',compact('controller','page_active','pages_title','data_user', 'data_courses'));
+      return view('backend.home',compact('controller','page_active','pages_title','data_user', 'courses','students'));
     }
 
     public function get_grade_courses(Request $request){
@@ -104,6 +104,35 @@ class HomeController extends Controller
       $output = [
           'categories' => $categories,
           'series' => $series
+      ];
+  
+      return response()->json($output);
+    }
+
+    public function get_grade_students(Request $request){
+      $student_id = $request->student_id;
+  
+      $query = Grade::whereHas('courses')
+          ->whereHas('students.faculties')
+          ->where('students_id', $student_id)
+          ->with(['courses'])
+          ->with(['students' => function($query) {
+              $query->orderBy('name', 'asc');
+          }, 'students.faculties'])
+          ->get();
+  
+      $data = [];
+  
+      foreach($query as $grade) {
+          $data[] = [
+              'name' => $grade->courses->name,
+              'grade' => $grade->grade,
+              'y' => $grade->total_score,
+          ];
+      }
+  
+      $output = [
+          'data' => $data
       ];
   
       return response()->json($output);
