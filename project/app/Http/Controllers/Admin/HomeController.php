@@ -121,16 +121,23 @@ class HomeController extends Controller
           }, 'students.faculties'])
           ->get();
   
-      $data = [];
-  
-      foreach($query as $grade) {
-          $data[] = [
-              'name' => $grade->courses->name,
-              'grade' => $grade->grade,
-              'y' => $grade->total_score,
-          ];
-      }
-  
+        $data = [];
+        $key = 0;
+        foreach($query as $grade) {
+            $sliced = $selected = false;
+            if ($key == 0) {
+                $sliced = $selected = true;
+            }
+            $data[] = [
+                'name' => $grade->courses->name,
+                'sliced' => $sliced,
+                'selected' => $selected,
+                'grade' => $grade->grade,
+                'y' => $grade->total_score,
+            ];
+            $key++;
+        }
+        
       $output = [
           'data' => $data
       ];

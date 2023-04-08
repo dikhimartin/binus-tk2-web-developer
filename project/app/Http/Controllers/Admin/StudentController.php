@@ -34,8 +34,7 @@ class StudentController extends Controller
         $operator_filter    = $request->get('operator_filter');
         $text_filter        = $request->get('text_filter');
 
-        $query = Student::where('status', 'Y')
-        ->orderBy('name')
+        $query = Student::orderBy('name')
         ->whereHas('faculties')
         ->with(['faculties' => function ($query) {
             $query->orderBy('name', 'desc');
