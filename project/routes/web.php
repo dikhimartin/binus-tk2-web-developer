@@ -9,8 +9,14 @@ Route::group(array('prefix' => LaravelLocalization::setLocale() . '/'), function
 Auth::routes();
 
 Route::group(array('prefix' => LaravelLocalization::setLocale() . '/admin', 'namespace' => 'Admin'), function () {
-
+	/*
+	 |--------------------------------------------------------------------------
+	 | MODUL DASHBOARD
+	 |--------------------------------------------------------------------------
+	*/
 	Route::get('/dashboard', 'HomeController@index')->name('home');
+	Route::post('/dashboard/report/grade-courses', 'HomeController@get_grade_courses');
+
 
 	/*
 	 |--------------------------------------------------------------------------
